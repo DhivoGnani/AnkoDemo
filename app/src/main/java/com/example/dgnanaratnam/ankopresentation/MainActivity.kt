@@ -184,3 +184,101 @@ class OrderFormUI : AnkoComponent<MainActivity> {
 
     }
 }
+
+class TestActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+//        linearLayout {
+//            button("Login") {
+//                textSize = 26f
+//            }.lparams(width = wrapContent) {
+//                horizontalMargin = dip(5)
+//                topMargin = dip(10)
+//            }
+//        }
+
+
+        // helper block
+//        verticalLayout {
+//            button("Ok")
+//            button(R.string.username)
+//        }
+
+        // themed helper block
+//        verticalLayout {
+//            themedButton("Ok", theme = R.style.myTheme)
+//        }
+
+
+        // Include tag example
+        include<View>(R.layout.activity_main) {
+            backgroundColor = Color.RED
+        }
+    }
+
+    private fun createLayoutUsingAnkoDSL() {
+        verticalLayout {
+            val name = editText()
+            button("Say Hello") {
+                onClick { toast("Hello, ${name.text}!") }
+            }
+        }
+    }
+
+    private fun createLayoutUsingPlainKotlin() {
+        val act = this
+        val layout = LinearLayout(act)
+        layout.orientation = LinearLayout.VERTICAL
+        val name = EditText(act)
+        val button = Button(act)
+        button.text = "Say Hello"
+        button.setOnClickListener {
+            Toast.makeText(act, "Hello, ${name.text}!", Toast.LENGTH_SHORT).show()
+        }
+        layout.addView(name)
+        layout.addView(button)
+        setContentView(layout)
+    }
+}
+
+class TestActivityUI : AnkoComponent<TestActivity> {
+    override fun createView(ui: AnkoContext<TestActivity>): View  = with(ui){
+        verticalLayout {
+            val name = editText()
+            button("Say Hello") {
+                onClick { ctx.toast("Hello, ${name.text}!") }
+            }
+        }
+
+    }
+
+}
+
+class SingInView : AnkoComponent<MainActivity> {
+
+    override fun createView(ui: AnkoContext<MainActivity>) = with(ui) {
+        verticalLayout {
+            lparams(width  = matchParent, height = matchParent)
+
+            // Can access context using ctx, extension property
+
+            editText {
+                // Do not need to use getString
+                hintResource = R.string.username
+                textSize = 24f
+            }.lparams(width = matchParent, height = wrapContent)
+
+            editText {
+                hint = "Password"
+                textSize = 24f
+            }.lparams(width = matchParent, height = wrapContent)
+
+            button {
+                text = "Sign In"
+            }.lparams(width = matchParent, height = wrapContent)
+        }
+    }
+
+}
